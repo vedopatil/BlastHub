@@ -12,8 +12,8 @@
 Step-by-step:  
 Auth → URL → Job creation → Upload → Event → Queue → Compute → Store → Status  
 This locks clarity before building.  
-Here’s a clearer version, ofc with a hyperlink:  
-![][image1]  
+Here’s a clearer version:  
+<img width="808" height="625" alt="image" src="https://github.com/user-attachments/assets/b3c39a15-758f-44e5-9b28-6e1baae072f4" />
 ---
 
 ### **3\. Key Decisions (THIS is the most important section)**
