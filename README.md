@@ -25,7 +25,8 @@ Users upload files which are processed asynchronously. The system:
 
 ## Architecture Diagram
 
-<img width="808" height="625" alt="image" src="https://github.com/user-attachments/assets/b3c39a15-758f-44e5-9b28-6e1baae072f4" />
+
+<img width="902" height="600" alt="image" src="https://github.com/user-attachments/assets/22aa87b5-665c-4893-862e-86b6fd332c91" />
 
 
 ---
@@ -33,7 +34,7 @@ Users upload files which are processed asynchronously. The system:
 ## System Flow
 
 1. User authenticates
-2. User requests upload → backend generates pre-signed URL + job ID
+2. User requests upload → backend (Lambda with IAM Role) generates pre-signed URL + job ID 
 3. User uploads file directly to storage
 4. Storage triggers event → message sent to queue
 5. Compute service pulls message from queue
