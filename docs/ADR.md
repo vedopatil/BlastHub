@@ -25,5 +25,10 @@
 ### Identity Management
 * A separate IAM User, with PowerUserAccess AWS managed job function policy, is attached to the User
 * This policy allows the user to access the required Lambda, S3, DynamoDB, API Gateway, and Cognito, which are crucial for this project's architecture
+* We will be attaching a new IAM role to the Lambda, which will allow the Lambda to generate Pre-Signed Tokens of S3, for users to upload objects to the bucket directly.
 
-* 
+
+### Some Key Decisions (Unmentioned earlier)
+* Used pre-signed URLs to avoid backend load
+* Used SQS to decouple ingestion from processing
+* Used prefix-based routing (uploads/raw/)
