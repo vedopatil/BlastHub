@@ -15,4 +15,15 @@
 
 ### Region
 * We will be making this project in Mumbai (ap-south-1) AWS Region
-* This keeps all the services in the same region and complies with data laws since files stored in S3 in the ap-south-1 region won't be leaving the boundary of country
+* This keeps all the services in the same region and complies with data laws since files stored in S3 in the ap-south-1 region won't leave the boundary of the country
+
+### Governance
+* We will be making a separate OU or Organisational Unit for this project
+* The OU will have sub-units for further management
+* For initial phases, there will only be a Dev Sub-OU for the development environment.
+
+### Identity Management
+* A separate IAM User, with PowerUserAccess AWS managed job function policy, is attached to the User
+* This policy allows the user to access the required Lambda, S3, DynamoDB, API Gateway, and Cognito, which are crucial for this project's architecture
+
+* 
