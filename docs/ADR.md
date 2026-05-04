@@ -32,3 +32,11 @@
 * Used pre-signed URLs to avoid backend load
 * Used SQS to decouple ingestion from processing
 * Used prefix-based routing (uploads/raw/)
+
+
+### Known gaps
+
+- No auth
+- No validation
+- No processing logic
+- No observability beyond logs
