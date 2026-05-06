@@ -28,15 +28,24 @@
 * We will be attaching a new IAM role to the Lambda, which will allow the Lambda to generate Pre-Signed Tokens of S3, for users to upload objects to the bucket directly.
 
 
-### Some Key Decisions (Unmentioned earlier)
+### Pre-Signed URLs
 * Used pre-signed URLs to avoid backend load
-* Used SQS to decouple ingestion from processing
-* Used prefix-based routing (uploads/raw/)
+* Lambda is used to generate Pre-signed URLs
+* Lambda has a role that allows access only to the required folder, following the least privilege principle
 
+### The Burst handling using decoupling
+* Used SQS to decouple ingestion from processing
+* This allows the processing to be queued and decoupled, so failure of any single file will ot affect other file rocessing.
+* Since the files are queued, the burst upload of files doesn't break the system since it is queued.
+* Dead-Letter Queue or DLQ is used, so if processing fails multiple times, the DLQ handles the failed file processing and allows further integration to notify and resolve the issue.
+
+### Folder simulation in S3 Bucket
+* Used prefix-based routing (uploads/raw/)
+* Instead of directly uploading to the S3 bucket, the user will upload the files only to a specific folder, uploads/raw/
+* This keeps the data logically separate, and allows utilisation of the same S3 bucket for several other future storage needs
 
 ### Known gaps
 
 - No auth
 - No validation
-- No processing logic
 - No observability beyond logs
