@@ -41,17 +41,12 @@ This flow ensures clarity before building. Here’s the architectural visualizat
 * **Why:** Fast, scalable state tracking. DynamoDB is used to track job lifecycle (pending, processing, completed, failed), enabling observability and idempotent processing.
 * **Trade-off:** Requires consideration of eventual consistency.
 
-#### Decision 6: Cognito
-* Used for user authentication.
-* Manages authorization; each request includes an auth token, allowing the backend to securely generate URLs only for authorized users.
-* Supports Google, Apple, Meta, and custom sign-ups, providing flexibility at any scale.
-
-#### Decision 7: S3
+#### Decision 6: S3
 * Chosen as a resilient storage solution that stays within cost limits for storing files to be processed.
 * Scales irrespective of load; as the system assumes burst scenarios, storage is the last component we want to fail. Options like EBS or Instance Store were ruled out.
 * More cost-efficient than RDS or DocumentDB and provides greater flexibility for a large variety of file types.
 
-#### Decision 8: API & API Gateway
+#### Decision 7: API & API Gateway
 * Provides a single point of access without exposing the entire backend.
 * API Gateway allows for the design and management of different API types.
 
