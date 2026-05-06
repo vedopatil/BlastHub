@@ -44,8 +44,14 @@
 * Instead of directly uploading to the S3 bucket, the user will upload the files only to a specific folder, uploads/raw/
 * This keeps the data logically separate, and allows utilisation of the same S3 bucket for several other future storage needs
 
+### Observability
+- CloudWatch logs allow every action to be logged, including API calls to every Lambda action
+- Custom Metric was added, named BlastHub, to improve observability
+- In the custom metric, both cases, Success and Failure of processing Lambda, are sent to CloudWatch
+
+
 ### Known gaps
 
 - No auth
 - No validation
-- No observability beyond logs
+- No observability beyond logs (a single custom metric implemented)
