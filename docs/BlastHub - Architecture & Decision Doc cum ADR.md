@@ -15,7 +15,8 @@
 
 This flow ensures clarity before building. Here’s the architectural visualization:  
 
-<img width="808" height="625" alt="image" src="https://github.com/user-attachments/assets/b3c39a15-758f-44e5-9b28-6e1baae072f4"/>
+<img width="1254" height="679" alt="image" src="https://github.com/user-attachments/assets/7d4390cb-eb4a-4f01-8e3f-ee5dadc59b67" />
+
 
 ---
 
