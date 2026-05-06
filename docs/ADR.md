@@ -49,9 +49,15 @@
 - Custom Metric was added, named BlastHub, to improve observability
 - In the custom metric, both cases, Success and Failure of processing Lambda, are sent to CloudWatch
 
+### Lambda
+- Three different Lambda Functions, with three different IAM Roles, are used in this project
+- All three roles have least privilege permissions, only allowing what is required for the specific task
+- Three places where lambda functions were used are as follows:
+   - To generate Pre-signed URLs, sits between API -> [LambdaForUploads] -> S3
+   - To process the uploaded files, and store details in DB, sits between S3 -> [ProcessUploadLambda] -> DynamoDB
+   - To allow users to check the status of uploaded files, reading from DB, sits between DynamoDB -> [StatusLambda] -> API
 
 ### Known gaps
-
 - No auth
 - No validation
 - No observability beyond logs (a single custom metric implemented)
