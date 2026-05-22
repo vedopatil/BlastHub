@@ -26,7 +26,7 @@ Users upload files which are processed asynchronously. The system:
 ## Architecture Diagram
 
 
-<img width="902" height="600" alt="image" src="https://github.com/user-attachments/assets/22aa87b5-665c-4893-862e-86b6fd332c91" />
+<img width="1243" height="679" alt="image" src="https://github.com/user-attachments/assets/2fabe5f9-f140-402f-94d4-61061e82c0d8" />
 
 
 ---
