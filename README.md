@@ -1,25 +1,31 @@
 # BlastHub
-What happens when the processing system has too many things to process? Poorly designed systems fail under burst traffic, leading to downtime, data loss, and uncontrolled costs. Let's try reducing the blast radius with this project.
 
-# Burst-Tolerant File Processing System (AWS)
+### Event-Driven Async File Processing System on AWS
+
+BlastHub is a serverless, event-driven file processing pipeline designed to handle burst uploads using asynchronous queue-based processing on AWS.
+
+The system uses S3, SQS, Lambda, DynamoDB, and API Gateway to decouple upload traffic from processing workloads while supporting retry handling, DLQ-based failure isolation, status tracking, and observability through CloudWatch metrics and structured logging.
+
+---
 
 ## Problem Statement
 
-Poorly designed systems fail under burst traffic, leading to:
-- downtime
-- data loss
-- uncontrolled costs
+Synchronous file-processing systems can become unreliable during sudden traffic spikes due to tightly coupled upload and processing workflows.
 
-This project demonstrates how to design a system that can **handle sudden spikes reliably** while remaining cost-efficient.
+BlastHub was built to explore how asynchronous, queue-based architectures improve workload isolation, failure handling, and scalability in serverless cloud environments.
 
 ---
 
 ## System Overview
 
-Users upload files which are processed asynchronously. The system:
-- absorbs spikes using a queue
-- scales compute automatically
-- tracks processing status reliably
+BlastHub accepts file uploads through pre-signed URLs and processes them asynchronously using an event-driven AWS architecture.
+
+The system:
+- decouples uploads from processing using SQS
+- absorbs burst traffic through queue buffering
+- tracks job state in DynamoDB
+- isolates failed processing through DLQ handling
+- emits CloudWatch metrics for operational visibility
 
 ---
 
@@ -33,15 +39,17 @@ Users upload files which are processed asynchronously. The system:
 
 ## System Flow
 
-1. User authenticates
-2. User requests upload → backend (Lambda with IAM Role) generates pre-signed URL + job ID 
-3. User uploads file directly to storage
-4. Storage triggers event → message sent to queue
-5. Compute service pulls message from queue
-6. File is processed (resize/compress/etc.)
-7. Processed file stored back in storage
-8. Job status updated in database
-9. User fetches status or downloads result
+1. Client requests a pre-signed upload URL through API Gateway
+2. Upload Lambda generates:
+   - pre-signed S3 upload URL
+   - unique job ID
+3. Client uploads file directly to S3
+4. S3 event notification sends metadata to SQS
+5. Processing Lambda consumes messages from SQS
+6. Processing metadata and job state are written to DynamoDB
+7. CloudWatch metrics and structured logs are emitted during processing
+8. Status API retrieves current processing state using job ID
+9. Failed processing attempts are retried automatically before routing to DLQ
 
 ---
 
@@ -61,12 +69,18 @@ Users upload files which are processed asynchronously. The system:
 - Ordering not required
 - Handles duplicate messages via idempotency
 
+### Dead-Letter Queue
+- Failed processings in Queue are routed to DLQ
+- Processing failure 3 times in a row pushes the message to DLQ
+- Allows retaining of failed processes
+- Keeps record of what failed as well
+
 ### Serverless Compute
 - Auto-scales with demand
 - No idle cost
 
 ### Database for State Tracking
-- Stores job status (pending, processing, completed, failed)
+- Stores job status (success, failed)
 - Enables user status queries
 
 ### No VPC (Intentional)
@@ -78,17 +92,20 @@ Users upload files which are processed asynchronously. The system:
 
 ## Failure Handling
 
-- Retry with exponential backoff
-- Dead Letter Queue (DLQ) for repeated failures
-- Idempotent processing using job IDs
+- Failed messages are retried automatically through SQS visibility timeout and Lambda retry behavior
+- Messages exceeding maxReceiveCount (currently 3) are routed to a Dead Letter Queue (DLQ)
+- FAILED processing states are persisted in DynamoDB
+- Structured logging and CloudWatch metrics improve failure visibility and debugging
 
 ---
 
 ## Cost Considerations
 
-- No always-on servers
-- Pay-per-use compute
-- Storage and processing decoupled
+- Serverless architecture avoids idle infrastructure costs
+- Pre-signed uploads reduce backend bandwidth and compute overhead
+- Queue-based decoupling prevents overprovisioning for burst workloads
+- No VPC or NAT Gateway usage to avoid unnecessary networking costs
+- Processing infrastructure scales on demand through Lambda concurrency
 
 ---
 
@@ -97,8 +114,10 @@ Users upload files which are processed asynchronously. The system:
 - Private storage (no public access)
 - Pre-signed URLs for secure upload/download
 - Least-privilege IAM roles
+- Lambda (Serverless Compute) scoped using least-privilege access principles
 
 ---
+
 ## Failure Scenario
 
 If processing Lambda fails:
@@ -114,10 +133,11 @@ If processing Lambda fails:
 
 ## Future Improvements
 
-- Use containers for sustained workloads
-- Add caching layer
-- Add monitoring and alerting
-- Introduce rate limiting
+- Authentication and user-level access control
+- Request rate limiting and abuse protection
+- Content validation during upload
+- Infrastructure-as-Code deployment automation
+- Extended monitoring dashboards and alerting
 
 ---
 
@@ -127,14 +147,19 @@ If processing Lambda fails:
 - Amazon SQS
 - AWS Lambda
 - Amazon DynamoDB
-- Amazon Cognito
-- API Gateway
+- Amazon API Gateway
+- Amazon CloudWatch
+- AWS IAM
 
 ---
 
 ## What This Project Demonstrates
 
-- Handling burst traffic
-- Event-driven architecture
-- Fault-tolerant design
-- Cost-aware system building
+- Event-driven serverless architecture
+- Asynchronous workload processing
+- Queue-based burst traffic handling
+- Distributed failure isolation using DLQs
+- DynamoDB-based state tracking
+- Cloud-native observability with CloudWatch metrics
+- Cost-aware AWS infrastructure design
+- Practical experience debugging distributed workflows
