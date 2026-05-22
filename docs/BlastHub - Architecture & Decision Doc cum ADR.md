@@ -1,4 +1,5 @@
-# Project Documentation: Burst-Resilient Async Processor
+# Project Documentation: 
+## BlastHub: A Burst-Resilient Async Processor
 
 ### 1. Problem Statement
 
