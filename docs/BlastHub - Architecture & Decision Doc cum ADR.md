@@ -3,10 +3,10 @@
 
 ### 1. Problem Statement
 
-* **Burst uploads** – The system must handle burst uploads where thousands of files may arrive in a short time window. It must process these files asynchronously without blocking user requests, ensure no data loss, and operate within a constrained budget. The system should remain stable under sudden spikes while allowing eventual completion of all processing jobs.  
+* **Burst uploads** – The system must handle burst uploads where thousands of files may arrive in a short time window. It must process these files asynchronously without blocking user requests, ensure minimal data loss, and operate within a constrained budget. The system should remain stable under sudden spikes while allowing eventual completion of all processing jobs.  
 * **Async processing** – Decoupled architecture ensures there is no dependency on whether the previous or next processing job fails.  
 * **Cost constraint** – A simulated budget of 10k/month is the upper bound, but this shouldn’t exceed the burst cost spikes, which are managed within this limit.  
-* **No data loss** – The core requirement: zero data loss and guaranteed processing for every job.
+* **No data loss** – The core requirement: minimal data loss and guaranteed processing for every job.
 
 ---
 
