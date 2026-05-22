@@ -163,3 +163,15 @@ If processing Lambda fails:
 - Cloud-native observability with CloudWatch metrics
 - Cost-aware AWS infrastructure design
 - Practical experience debugging distributed workflows
+
+-----
+
+## Operational Lessons Learned
+
+- Native S3 event notifications proved simpler and more appropriate than introducing EventBridge for the current workload requirements.
+- Initial designs required further decomposition during implementation, leading to dedicated Lambdas for processing and status retrieval to simplify responsibilities and debugging.
+- Queue-based decoupling simplified handling of upload bursts by separating ingestion throughput from processing throughput.
+- Simulating processing failures helped validate retry behavior and reinforced the importance of DLQ-based failure isolation in asynchronous systems.
+- Structured logging significantly improved debugging across asynchronous processing stages and failure scenarios.
+- Custom CloudWatch metrics became increasingly valuable once multiple asynchronous components were introduced into the workflow.
+- DynamoDB status tracking required careful handling to avoid inconsistent job states during failed processing attempts.
