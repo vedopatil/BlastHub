@@ -39,7 +39,7 @@ This flow ensures clarity before building. Here’s the architectural visualizat
 * **Trade-off:** A VPC is intentionally avoided since all services are managed and do not require private networking. Introducing a VPC would add unnecessary cost (e.g., NAT Gateway) and operational complexity without meaningful benefit.
 
 #### Decision 5: DynamoDB
-* **Why:** Fast, scalable state tracking. DynamoDB is used to track job lifecycle (pending, processing, completed, failed), enabling observability and idempotent processing.
+* **Why:** Fast, scalable state tracking. DynamoDB is used to track job lifecycle (pending, processing, completed, failed), enabling observability and idempotent processing in future.
 * **Trade-off:** Requires consideration of eventual consistency.
 
 #### Decision 6: S3
