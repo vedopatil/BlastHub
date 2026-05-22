@@ -94,10 +94,21 @@ Users upload files which are processed asynchronously. The system:
 
 ## Security
 
-- Authentication via Cognito
 - Private storage (no public access)
 - Pre-signed URLs for secure upload/download
 - Least-privilege IAM roles
+
+---
+## Failure Scenario
+
+If processing Lambda fails:
+
+1. Message remains unacknowledged
+2. SQS visibility timeout expires
+3. Message becomes available again
+4. Lambda retries processing
+5. After maxReceiveCount exceeded, message moves to DLQ
+6. FAILED state persisted in DynamoDB
 
 ---
 
